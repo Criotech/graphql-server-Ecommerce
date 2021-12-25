@@ -11,7 +11,7 @@ const products = [
       onSale: false,
     },
     {
-      id: "c2af9adc-d0b8-4d44-871f-cef66f86f7f6",
+      id: "c2af9adc-d0b8-4d44-871f-cef66f86f7f6",      
       name: "Salad Bowl",
       description: "Round wooden bowl perfect for tossing and making salads",
       quantity: 33,
@@ -88,6 +88,7 @@ const typeDefs = gql`
     type Query {
         hello: String
         products: [Product!]!
+        product(id: ID!): Product
     }
 
     type Product {
@@ -95,10 +96,10 @@ const typeDefs = gql`
         description: String!
         quantity: Int!
         price: Float!
+        image: String!
         onSale: Boolean!
     }   
 `;
-
 
 
 const resolvers = {
@@ -108,6 +109,13 @@ const resolvers = {
         },
         products: () => {
             return products
+        },
+        product: (parent, args, context) => {
+            const productId = args.id;
+
+            const product = products.find(product => product.id === productId);
+            if (!product) return null;
+            return product;
         }
     }
 }
